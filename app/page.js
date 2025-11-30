@@ -1,10 +1,17 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { useAuth } from "@/app/lib/AuthContext";
 import Link from "next/link";
 
 export default function Home() {
   const { user, loading } = useAuth();
+  const [imageError, setImageError] = useState(false);
+
+  // Reset błędu obrazu gdy zmienia się użytkownik
+  useEffect(() => {
+    setImageError(false);
+  }, [user?.photoURL]);
 
   if (loading) {
     return (
@@ -23,11 +30,23 @@ export default function Home() {
         // Widok dla zalogowanego użytkownika - styl Tailblocks
         <div className="bg-white shadow-lg rounded-lg p-8">
           <div className="text-center mb-8">
-            <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-indigo-100 mb-4">
-              <span className="text-3xl">👤</span>
-            </div>
+            {/* Warunkowe renderowanie zdjęcia profilowego */}
+            {user.photoURL && !imageError ? (
+              <div className="inline-flex items-center justify-center mb-4">
+                <img
+                  src={user.photoURL}
+                  alt="Zdjęcie profilowe"
+                  className="w-20 h-20 rounded-full object-cover border-4 border-indigo-200 shadow-lg"
+                  onError={() => setImageError(true)}
+                />
+              </div>
+            ) : (
+              <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-indigo-100 mb-4">
+                <span className="text-3xl">👤</span>
+              </div>
+            )}
             <h1 className="text-3xl font-bold text-gray-900 mb-2">
-              Witaj, {user.email}!
+              Witaj, {user.displayName || user.email}!
             </h1>
             <p className="text-gray-600">
               Zostałeś pomyślnie zalogowany do aplikacji.
