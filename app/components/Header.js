@@ -13,9 +13,28 @@ export default function Header() {
           <div className="text-sm text-gray-400">Ładowanie...</div>
         ) : user ? (
           <>
-            <div className="text-sm text-gray-600">
-              Zalogowany jako:{" "}
-              <span className="font-semibold text-indigo-600">{user.email}</span>
+            <div className="flex items-center gap-3">
+              {/* Warunkowe renderowanie zdjęcia profilowego */}
+              {user.photoURL ? (
+                <img
+                  src={user.photoURL}
+                  alt="Zdjęcie profilowe"
+                  className="w-10 h-10 rounded-full object-cover border-2 border-indigo-200"
+                  onError={(e) => {
+                    e.target.style.display = "none";
+                  }}
+                />
+              ) : (
+                <div className="w-10 h-10 rounded-full bg-indigo-100 flex items-center justify-center">
+                  <span className="text-indigo-600 font-semibold text-sm">
+                    {user.email ? user.email.charAt(0).toUpperCase() : "U"}
+                  </span>
+                </div>
+              )}
+              <div className="text-sm text-gray-600">
+                Zalogowany jako:{" "}
+                <span className="font-semibold text-indigo-600">{user.email}</span>
+              </div>
             </div>
             <div className="flex gap-4">
               <Link
