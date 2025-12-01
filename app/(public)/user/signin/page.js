@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { signInWithEmailAndPassword, setPersistence, browserSessionPersistence, signOut } from 'firebase/auth';
+import { signInWithEmailAndPassword, setPersistence, browserSessionPersistence } from 'firebase/auth';
 import { auth } from '@/app/lib/firebase';
 import { useSearchParams, useRouter } from "next/navigation";
 
@@ -25,18 +25,9 @@ export default function SignInPage() {
       await setPersistence(auth, browserSessionPersistence);
       
       // Logowanie użytkownika
-      const userCredential = await signInWithEmailAndPassword(auth, email, password);
-      const user = userCredential.user;
+      await signInWithEmailAndPassword(auth, email, password);
       
-      // Sprawdzenie czy email jest zweryfikowany
-      if (!user.emailVerified) {
-        // Jeśli email nie jest zweryfikowany, wyloguj i przekieruj do strony weryfikacji
-        await signOut(auth);
-        router.push("/user/verify");
-        return;
-      }
-      
-      // Przekierowanie po udanym logowaniu (tylko jeśli email jest zweryfikowany)
+      // Przekierowanie po udanym logowaniu
       if (returnUrl) {
         router.push(returnUrl);
       } else {

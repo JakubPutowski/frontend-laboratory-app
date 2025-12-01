@@ -47,7 +47,7 @@ export default function Home() {
             )}
             <h1 className="text-3xl font-bold text-gray-900 mb-2">
               Witaj, {user.displayName || user.email}!
-            </h1>
+          </h1>
             <p className="text-gray-600">
               Zostałeś pomyślnie zalogowany do aplikacji.
             </p>

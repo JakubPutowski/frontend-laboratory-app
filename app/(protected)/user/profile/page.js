@@ -2,22 +2,57 @@
 
 import { useState, useEffect } from "react";
 import { updateProfile } from "firebase/auth";
+import { doc, setDoc, getDoc } from "firebase/firestore";
 import { useAuth } from "@/app/lib/AuthContext";
+import { db } from "@/app/lib/firebase";
 
 export default function ProfilePage() {
   const { user } = useAuth();
   const [displayName, setDisplayName] = useState("");
   const [photoURL, setPhotoURL] = useState("");
+  const [street, setStreet] = useState("");
+  const [city, setCity] = useState("");
+  const [zipCode, setZipCode] = useState("");
   const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false); // wysyłanie formularza
   const [success, setSuccess] = useState(false);
+  const [addressLoading, setAddressLoading] = useState(true); // pobieranie adresu
 
-  // Wczytanie aktualnych danych użytkownika
+  // Wczytanie aktualnych danych użytkownika z Authentication
   useEffect(() => {
     if (user) {
       setDisplayName(user.displayName || "");
       setPhotoURL(user.photoURL || "");
     }
+  }, [user]);
+
+  // Wczytanie adresu użytkownika z kolekcji "users"
+  useEffect(() => {
+    const fetchAddress = async () => {
+      if (!user) {
+        setAddressLoading(false);
+        return;
+      }
+
+      try {
+        const snapshot = await getDoc(doc(db, "users", user?.uid));
+        if (snapshot.exists()) {
+          const address = snapshot.data().address;
+          if (address) {
+            setCity(address.city || "");
+            setZipCode(address.zipCode || "");
+            setStreet(address.street || "");
+          }
+        }
+      } catch (err) {
+        console.error("Błąd pobierania adresu użytkownika:", err);
+        setError("Nie udało się pobrać adresu użytkownika.");
+      } finally {
+        setAddressLoading(false);
+      }
+    };
+
+    fetchAddress();
   }, [user]);
 
   const onSubmit = async (e) => {
@@ -33,19 +68,40 @@ export default function ProfilePage() {
     }
 
     try {
+      // aktualizacja profilu w Authentication
       await updateProfile(user, {
         displayName: displayName,
         photoURL: photoURL,
       });
+
+      // utworzenie / aktualizacja dokumentu użytkownika w kolekcji "users"
+      await setDoc(
+        doc(db, "users", user?.uid),
+        {
+          address: {
+            street: street,
+            city: city,
+            zipCode: zipCode,
+          },
+        },
+        { merge: true }
+      );
+
       console.log("Profile updated");
       setSuccess(true);
       setLoading(false);
-      
+
       // Ukryj komunikat sukcesu po 3 sekundach
       setTimeout(() => setSuccess(false), 3000);
     } catch (error) {
-      setError(error.message);
       console.error("Błąd aktualizacji profilu:", error);
+      if (error.code === "permission-denied") {
+        setError(
+          "Brak uprawnień do zapisu danych użytkownika. Sprawdź reguły Firestore."
+        );
+      } else {
+        setError(error.message || "Wystąpił błąd podczas zapisu profilu.");
+      }
       setLoading(false);
     }
   };
@@ -122,6 +178,62 @@ export default function ProfilePage() {
             <p className="mt-1 text-xs text-gray-500">
               Email nie może być zmieniony
             </p>
+          </div>
+
+          {/* Dane adresowe */}
+          <div className="mb-6">
+            <label
+              htmlFor="street"
+              className="block text-sm font-medium text-gray-700 mb-2"
+            >
+              Ulica
+            </label>
+            <input
+              type="text"
+              id="street"
+              value={street}
+              onChange={(e) => setStreet(e.target.value)}
+              disabled={addressLoading}
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition"
+              placeholder="np. Długa 10/2"
+            />
+          </div>
+
+          <div className="mb-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label
+                htmlFor="city"
+                className="block text-sm font-medium text-gray-700 mb-2"
+              >
+                Miasto
+              </label>
+              <input
+                type="text"
+                id="city"
+                value={city}
+                onChange={(e) => setCity(e.target.value)}
+                disabled={addressLoading}
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition"
+                placeholder="np. Warszawa"
+              />
+            </div>
+            <div>
+              <label
+                htmlFor="zipCode"
+                className="block text-sm font-medium text-gray-700 mb-2"
+              >
+                Kod pocztowy
+              </label>
+              <input
+                type="text"
+                id="zipCode"
+                value={zipCode}
+                onChange={(e) => setZipCode(e.target.value)}
+                disabled={addressLoading}
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition"
+                placeholder="np. 00-000"
+              />
+            </div>
           </div>
 
           <div className="mb-6">

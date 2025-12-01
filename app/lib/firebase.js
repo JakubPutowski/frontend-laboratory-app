@@ -1,6 +1,7 @@
 // Importuj funkcje potrzebne z Firebase SDK
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
+import { getFirestore } from "firebase/firestore"; // nowy kod
 
 // Konfiguracja Firebase - dane z zmiennych środowiskowych
 const firebaseConfig = {
@@ -17,4 +18,6 @@ const app = initializeApp(firebaseConfig);
 
 // Inicjalizacja Firebase Authentication i eksport
 export const auth = getAuth(app);
+// Inicjalizacja Firestore i eksport
+export const db = getFirestore(app); // nowy kod
 export default app;
