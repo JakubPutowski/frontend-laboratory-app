@@ -1,11 +1,25 @@
 "use client";
 
-import { useState } from "react";
-import { signInWithEmailAndPassword, setPersistence, browserSessionPersistence } from 'firebase/auth';
+import { Suspense, useState } from "react";
+import { signInWithEmailAndPassword, setPersistence, browserSessionPersistence, signOut } from 'firebase/auth';
 import { auth } from '@/app/lib/firebase';
 import { useSearchParams, useRouter } from "next/navigation";
 
-export default function SignInPage() {
+export default function SignInPageWrapper() {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex items-center justify-center min-h-[60vh]">
+          <p className="text-gray-600">Ładowanie formularza logowania...</p>
+        </div>
+      }
+    >
+      <SignInPage />
+    </Suspense>
+  );
+}
+
+function SignInPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -27,7 +41,15 @@ export default function SignInPage() {
       // Logowanie użytkownika
       await signInWithEmailAndPassword(auth, email, password);
       
-      // Przekierowanie po udanym logowaniu
+      // Sprawdzenie czy email jest zweryfikowany
+      if (auth.currentUser && !auth.currentUser.emailVerified) {
+        // Jeśli email nie jest zweryfikowany, wyloguj i przekieruj do strony weryfikacji
+        await signOut(auth);
+        router.push("/user/verify");
+        return;
+      }
+      
+      // Przekierowanie po udanym logowaniu (tylko jeśli email jest zweryfikowany)
       if (returnUrl) {
         router.push(returnUrl);
       } else {

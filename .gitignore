@@ -23,6 +23,7 @@
 # misc
 .DS_Store
 *.pem
+firebase-admin-key.json
 
 # debug
 npm-debug.log*
@@ -36,6 +37,17 @@ yarn-error.log*
 # vercel
 .vercel
 
+# firebase
+.firebase/
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Playwright
+node_modules/
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+/playwright/.auth/

@@ -19,5 +19,5 @@ const app = initializeApp(firebaseConfig);
 // Inicjalizacja Firebase Authentication i eksport
 export const auth = getAuth(app);
 // Inicjalizacja Firestore i eksport
-export const db = getFirestore(app); // nowy kod
+export const db = getFirestore(app); 
 export default app;
