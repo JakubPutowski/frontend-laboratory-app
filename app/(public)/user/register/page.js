@@ -49,20 +49,7 @@ export default function RegisterPage() {
         router.push("/user/verify");
       }
     } catch (error) {
-      const errorCode = error.code;
-      const errorMessage = error.message;
-      
-      // Obsługa próby ponownej rejestracji z już zarejestrowanym adresem email
-      if (errorCode === 'auth/email-already-in-use') {
-        setRegisterError('Ten adres email jest już zarejestrowany. Użyj innego adresu lub zaloguj się.');
-      } else if (errorCode === 'auth/invalid-email') {
-        setRegisterError('Nieprawidłowy adres email.');
-      } else if (errorCode === 'auth/weak-password') {
-        setRegisterError('Hasło jest zbyt słabe. Użyj co najmniej 6 znaków.');
-      } else {
-        setRegisterError(errorMessage);
-      }
-      
+      setRegisterError(error.message);
       console.dir(error);
       setLoading(false);
     }

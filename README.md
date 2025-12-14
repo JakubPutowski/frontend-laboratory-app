@@ -1,36 +1,102 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Gra w Kółko i Krzyżyk
 
-## Getting Started
+Aplikacja webowa do gry w kółko i krzyżyk zbudowana z użyciem Next.js, Firebase i Tailwind CSS.
 
-First, run the development server:
+## 🎮 Funkcje
 
+- **Uwierzytelnianie użytkowników** - Rejestracja i logowanie przez Firebase Authentication
+- **Autoryzacja** - Chronione ścieżki dostępne tylko dla zalogowanych użytkowników
+- **Gra w kółko i krzyżyk** - Pełna implementacja gry z zapisem do Firestore
+- **Profil użytkownika** - Zarządzanie danymi użytkownika i adresem
+- **Historia gier** - Lista wszystkich gier użytkownika
+- **Responsywny design** - Działa na urządzeniach mobilnych, tabletach i monitorach
+
+## 🛠️ Technologie
+
+- **Next.js 16** - Framework React z App Router
+- **Firebase** - Authentication i Firestore
+- **Tailwind CSS 4** - Stylowanie
+- **React Icons** - Ikony
+- **Playwright** - Testy end-to-end
+
+## 📋 Wymagania
+
+- Node.js 18+ 
+- npm lub yarn
+- Konto Firebase z projektem
+
+## 🚀 Instalacja
+
+1. Sklonuj repozytorium:
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone <url-repozytorium>
+cd frontend-laboratory-app
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Zainstaluj zależności:
+```bash
+npm install
+```
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+3. Utwórz plik `.env.local` z konfiguracją Firebase:
+```env
+NEXT_PUBLIC_API_KEY=your-api-key
+NEXT_PUBLIC_AUTH_DOMAIN=your-auth-domain
+NEXT_PUBLIC_PROJECT_ID=your-project-id
+NEXT_PUBLIC_STORAGE_BUCKET=your-storage-bucket
+NEXT_PUBLIC_MESSAGING_SENDER_ID=your-messaging-sender-id
+NEXT_PUBLIC_APP_ID=your-app-id
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+4. Uruchom serwer deweloperski:
+```bash
+npm run dev
+```
 
-## Learn More
+Aplikacja będzie dostępna pod adresem [http://localhost:3000](http://localhost:3000)
 
-To learn more about Next.js, take a look at the following resources:
+## 🧪 Testy
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Uruchom testy Playwright:
+```bash
+npx playwright test
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 📦 Build produkcyjny
 
-## Deploy on Vercel
+```bash
+npm run build
+npm start
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 🚀 Deployment
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Aplikacja może być wdrożona na Firebase Hosting:
+
+```bash
+firebase deploy --only hosting
+```
+
+Wymagany jest plan Firebase Blaze (pay-as-you-go) dla dynamicznych routów Next.js.
+
+## 📁 Struktura projektu
+
+```
+app/
+├── (protected)/          # Chronione ścieżki (wymagają logowania)
+│   ├── games/             # Lista gier i pojedyncza gra
+│   └── user/              # Profil i wylogowanie
+├── (public)/              # Publiczne ścieżki
+│   └── user/              # Logowanie, rejestracja, weryfikacja
+├── about/                 # Strona "O aplikacji"
+├── components/            # Komponenty (AppShell, Header)
+└── lib/                   # Konfiguracja Firebase i logika biznesowa
+```
+
+## 👤 Autor
+
+Jakub Putowski
+
+## 📄 Licencja
+
+Projekt prywatny

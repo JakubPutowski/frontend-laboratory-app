@@ -29,6 +29,24 @@ export default function Home() {
       {user ? (
         // Widok dla zalogowanego użytkownika - styl Tailblocks
         <div className="bg-white shadow-lg rounded-lg p-8">
+          {/* Komunikat o weryfikacji email */}
+          {!user.emailVerified && (
+            <div className="mb-6 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+              <div className="flex items-start gap-3">
+                <span className="text-2xl">⚠️</span>
+                <div>
+                  <h3 className="font-semibold text-yellow-800 mb-1">
+                    Email nie zweryfikowany
+                  </h3>
+                  <p className="text-sm text-yellow-700">
+                    Musisz zweryfikować swój adres email, aby w pełni korzystać z aplikacji. 
+                    Sprawdź swoją skrzynkę pocztową i kliknij w link weryfikacyjny.
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
+
           <div className="text-center mb-8">
             {/* Warunkowe renderowanie zdjęcia profilowego */}
             {user.photoURL && !imageError ? (
@@ -47,7 +65,7 @@ export default function Home() {
             )}
             <h1 className="text-3xl font-bold text-gray-900 mb-2">
               Witaj, {user.displayName || user.email}!
-          </h1>
+            </h1>
             <p className="text-gray-600">
               Zostałeś pomyślnie zalogowany do aplikacji.
             </p>
@@ -68,14 +86,14 @@ export default function Home() {
             </Link>
 
             <Link
-              href="/user/changepassword"
+              href="/games"
               className="p-6 bg-indigo-50 rounded-lg border border-indigo-200 hover:bg-indigo-100 transition-colors"
             >
               <div className="flex items-center gap-3">
-                <span className="text-2xl">🔒</span>
+                <span className="text-2xl">🎮</span>
                 <div>
-                  <h3 className="font-semibold text-gray-900">Zmień hasło</h3>
-                  <p className="text-sm text-gray-600">Zaktualizuj hasło</p>
+                  <h3 className="font-semibold text-gray-900">Moje gry</h3>
+                  <p className="text-sm text-gray-600">Zarządzaj grami</p>
                 </div>
               </div>
             </Link>
@@ -95,10 +113,10 @@ export default function Home() {
         <div className="bg-white shadow-lg rounded-lg p-8 text-center">
           <div className="mb-6">
             <h1 className="text-3xl font-bold text-gray-900 mb-2">
-              Frontend Laboratory App
+              Gra w Kółko i Krzyżyk
             </h1>
             <p className="text-gray-600">
-              Aplikacja laboratoryjna z autentykacją Firebase
+              Zaloguj się, aby rozpocząć grę
             </p>
           </div>
 
