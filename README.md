@@ -3,9 +3,6 @@
 Aplikacja webowa do gry w kółko i krzyżyk zbudowana z użyciem Next.js, Firebase i Tailwind CSS.
 
 Link do wersji live - https://frontend-laboratory-app-aee52.web.app
-Przykładowy login:
-test@lab.com
-Test123!
 
 ## 🎮 Funkcje
 
